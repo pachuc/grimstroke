@@ -2,6 +2,8 @@ import sys, pygame, math, random
 from random import randint
 from screeninfo import get_monitors
 from perlin_noise import PerlinNoise
+from threading import Thread
+import time
 
 
 class Painting:
@@ -22,6 +24,7 @@ class Painting:
     self.num_rows      = int((self.bottom_y - self.top_y) / self.resolution)
     self.grid          = [[0 for col in range(self.num_columns)] for row in range(self.num_rows)]
     self.clock         = pygame.time.Clock()
+    self.dt            = None
 
 
   def coin_flip(self, num_choices=2):
@@ -192,12 +195,32 @@ class Painting:
   def refresh(self):
     pygame.display.flip()
 
+  
+  def draw_refresh_thread(self):
+    self.dt.join(60)
+    if self.dt.is_alive():
+      self.dt.raise_exception()
+    else:
+      self.refresh()
+      self.dt = Thread(target=self.draw)
+      self.dt.start()
+  
+
+  def save(self):
+    filename = f"./saved_images/{time.time()}.png"
+    f = open(filename, "x")
+    f.close()
+    pygame.image.save(self.screen, filename)
+
+
 
   def run(self):
 
     self.draw()
     self.refresh()
-    self.draw()
+    self.dt = Thread(target=self.draw)
+    self.dt.start()
+    pygame.time.set_timer(42069, 5*1000)
 
     running = True
     while running:
@@ -207,16 +230,20 @@ class Painting:
         if event.type == pygame.QUIT:
           running = False
 
+        if event.type == 42069:
+          self.draw_refresh_thread()
+
         if event.type == pygame.KEYDOWN:
-          if event.key == pygame.K_RETURN:
-            self.refresh()
-            self.draw()
           
           if event.key == pygame.K_ESCAPE:
             running = False
-      
+          
+          if event.key == pygame.K_s:
+            self.save()
+
       pygame.event.clear()
-    
+
+    self.dt.join(60)
     pygame.quit()
 
 
