@@ -21,6 +21,7 @@ class Painting:
     self.num_columns   = int((self.right_x - self.left_x) / self.resolution)
     self.num_rows      = int((self.bottom_y - self.top_y) / self.resolution)
     self.grid          = [[0 for col in range(self.num_columns)] for row in range(self.num_rows)]
+    self.clock         = pygame.time.Clock()
 
 
   def coin_flip(self, num_choices=2):
@@ -78,7 +79,6 @@ class Painting:
     self.static_radius = self.coin_flip()
     self.filled_circles = self.coin_flip(4)
     self.static_circle_thickness = self.coin_flip()
-
 
     self.num_points = randint(20, 500)
 
@@ -147,8 +147,7 @@ class Painting:
             pygame.draw.line(self.screen, self.color, (x, y), (end_x, end_y), self.thickness)
       else:
         pygame.draw.line(self.screen, self.color, (x, y), (end_x, end_y), self.thickness)
-      
-      #self.elements.append(elm)
+
       x = end_x
       y = end_y
 
@@ -195,22 +194,30 @@ class Painting:
 
 
   def run(self):
+
     self.draw()
     self.refresh()
+    self.draw()
 
-    while 1:
+    running = True
+    while running:
+      self.clock.tick(60)
+      
       for event in pygame.event.get():
-        if event.type == pygame.QUIT: sys.exit()
+        if event.type == pygame.QUIT:
+          running = False
 
         if event.type == pygame.KEYDOWN:
           if event.key == pygame.K_RETURN:
-            self.draw()
             self.refresh()
+            self.draw()
           
           if event.key == pygame.K_ESCAPE:
-            sys.exit()
+            running = False
       
       pygame.event.clear()
+    
+    pygame.quit()
 
 
 p = Painting()
