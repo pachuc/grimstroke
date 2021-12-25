@@ -82,6 +82,7 @@ class Painting:
     self.static_radius = self.coin_flip()
     self.filled_circles = self.coin_flip(4)
     self.static_circle_thickness = self.coin_flip()
+    self.non_overlapping_circles = self.coin_flip()
 
     self.num_points = randint(20, 500)
 
@@ -134,6 +135,8 @@ class Painting:
       
       if not self.static_radius:
         self.radius = self.random_radius()
+      elif self.non_overlapping_circles:
+        self.radius = self.resolution/2
 
       if self.filled_circles:
         self.circle_thickness = 0
