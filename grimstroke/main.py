@@ -1,8 +1,9 @@
 import sys, pygame, math, pathlib, time
 from random import randint, random
+from copy import deepcopy
 from screeninfo import get_monitors
 from perlin_noise import PerlinNoise
-from color_pallete import ColorPallete
+from color_palette import ColorPalette
 
 
 class Painting:
@@ -23,7 +24,7 @@ class Painting:
     self.num_rows      = int((self.bottom_y - self.top_y) / self.resolution)
     self.grid          = [[0 for col in range(self.num_columns)] for row in range(self.num_rows)]
     self.clock         = pygame.time.Clock()
-    self.color_pallete = ColorPallete()
+    self.color_palette = ColorPalette()
 
 
   def coin_flip(self, num_choices=2):
@@ -59,9 +60,39 @@ class Painting:
     return randint(1, 10)
   
 
+  def get_config(self):
+    config = {}
+    attributes = ["max_thickness", 
+                  "max_gap", 
+                  "thickness", 
+                  "num_steps", 
+                  "gap", 
+                  "rounding_factor", 
+                  "radius", 
+                  "circle_thickness",
+                  "static_thickness",
+                  "static_steps",
+                  "static_gap",
+                  "should_round",
+                  "include_circles",
+                  "only_circles",
+                  "static_radius",
+                  "filled_circles",
+                  "static_circle_thickness",
+                  "non_overlapping_circles",
+                  "use_random_angles",
+                  "use_random_height",
+                  "use_random_points",
+                  "use_same_points",
+                  "num_points"]
+    for a in attributes:
+      config[a] = getattr(self, a)
+    config["color_palette"] = self.color_palette.get_config()
+    return config
+
   def seed(self):
-    self.color_pallete.seed()
-    self.background = self.color_pallete.get_background()
+    self.color_palette.seed()
+    self.background = self.color_palette.get_background()
     self.max_thickness = randint(20, 100)
     self.max_gap       = randint(20, 100)
     self.thickness = self.random_thickness()
@@ -137,7 +168,7 @@ class Painting:
       end_x = x + x_diff
       end_y = y + y_diff
 
-      self.color = self.color_pallete.get_color()
+      self.color = self.color_palette.get_color()
       
       if not self.static_thickness:
         self.thickness = self.random_thickness()
@@ -243,6 +274,10 @@ class Painting:
     f = open(filename, "x")
     f.close()
     pygame.image.save(self.screen, filename)
+    filename = f"{current_path}/saved_images/{time.time()}.txt"
+    f = open(filename, "x")
+    f.write(str(self.get_config()))
+    f.close()
 
 
 

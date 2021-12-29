@@ -1,6 +1,6 @@
 from random import randint, choices
 
-class ColorPallete:
+class ColorPalette:
 
   def __init__(self):
     self.strategy = None
@@ -17,7 +17,7 @@ class ColorPallete:
                              "sunset",
                              "pastel",
                              "modern"]
-
+    
   def seed(self):
     self.strategy = choices(self.color_strategies, weights=[2, 10, 10, 2, 2, 2, 2, 2])[0]
     self.function = "fixed_options"
@@ -68,7 +68,12 @@ class ColorPallete:
       self.color_choices.append((255, 46, 99))
       self.color_choices.append((234, 234, 234))
 
-
+  def get_config(self):
+    config = {}
+    attributes = ["strategy", "color", "background", "color_choices"]
+    for a in attributes:
+      config[a] = getattr(self, a)
+    return config
 
   def get_background(self):
     return self.background
