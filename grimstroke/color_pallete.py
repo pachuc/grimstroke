@@ -19,7 +19,7 @@ class ColorPallete:
                              "modern"]
 
   def seed(self):
-    self.strategy = choices(self.color_strategies, weights=[6, 8, 6, 2, 2, 2, 2, 2])[0]
+    self.strategy = choices(self.color_strategies, weights=[2, 10, 10, 2, 2, 2, 2, 2])[0]
     self.function = "fixed_options"
     self.color_choices = []
     self.background = self.random_color()

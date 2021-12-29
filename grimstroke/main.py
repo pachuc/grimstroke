@@ -2,8 +2,6 @@ import sys, pygame, math, random
 from random import randint
 from screeninfo import get_monitors
 from perlin_noise import PerlinNoise
-from threading import Thread
-import time
 from color_pallete import ColorPallete
 
 
@@ -25,7 +23,6 @@ class Painting:
     self.num_rows      = int((self.bottom_y - self.top_y) / self.resolution)
     self.grid          = [[0 for col in range(self.num_columns)] for row in range(self.num_rows)]
     self.clock         = pygame.time.Clock()
-    self.dt            = None
     self.color_pallete = ColorPallete()
 
 
@@ -53,13 +50,13 @@ class Painting:
     return randint(10, 100)
 
   def random_gap(self):
-    return self.biased_rand_int(0, self.max_gap, 5, min)
+    return self.biased_rand_int(1, self.max_gap, 5, min)
 
   def random_radius(self):
     return (random.random() * self.resolution)
   
   def random_circle_thickness(self):
-    return randint(0, 10)
+    return randint(1, 10)
   
 
   def seed(self):
@@ -262,9 +259,7 @@ class Painting:
 
     self.draw()
     self.refresh()
-    self.dt = Thread(target=self.draw)
-    self.dt.start()
-    pygame.time.set_timer(42069, 5*1000)
+    pygame.time.set_timer(42069, 60*1000)
 
     running = True
     while running:
@@ -275,7 +270,8 @@ class Painting:
           running = False
 
         if event.type == 42069:
-          self.draw_refresh_thread()
+          self.draw()
+          self.refresh()
 
         if event.type == pygame.KEYDOWN:
           
@@ -287,7 +283,6 @@ class Painting:
 
       pygame.event.clear()
 
-    self.dt.join(60)
     pygame.quit()
 
 
