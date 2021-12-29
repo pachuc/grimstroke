@@ -236,16 +236,6 @@ class Painting:
   def refresh(self):
     pygame.display.flip()
 
-  
-  def draw_refresh_thread(self):
-    self.dt.join(60)
-    if self.dt.is_alive():
-      self.dt.raise_exception()
-    else:
-      self.refresh()
-      self.dt = Thread(target=self.draw)
-      self.dt.start()
-  
 
   def save(self):
     current_path = pathlib.Path(__file__).parent.resolve()
