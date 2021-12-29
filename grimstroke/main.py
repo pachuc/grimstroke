@@ -84,7 +84,10 @@ class Painting:
     self.filled_circles = self.coin_flip(4)
     self.static_circle_thickness = self.coin_flip()
     self.non_overlapping_circles = self.coin_flip()
-
+    self.use_random_angles = self.coin_flip(10)
+    self.use_random_height = self.coin_flip()
+    self.use_random_points = self.coin_flip(10)
+    self.use_same_points = self.coin_flip(10)
     self.num_points = randint(20, 500)
 
 
@@ -94,16 +97,25 @@ class Painting:
 
 
   def refresh_grid(self):
-    noise = PerlinNoise()
-    for row in range(0, self.num_rows):
-      for col in range(0, self.num_columns):
-        scaled_x = col * 0.005
-        scaled_y = row * 0.005
-        noise_val = noise([scaled_x, scaled_y])
-        angle = noise_val * 2 * math.pi
-        if self.should_round:
-          angle = self.round_angle(angle)
-        self.grid[row][col] = angle
+    if self.use_random_angles:
+      scalar = randint(1, 2)
+      for row in range(0, self.num_rows):
+        for col in range(0, self.num_columns):
+          angle = random.random() * scalar * math.pi
+          if self.should_round:
+            angle = self.round_angle(angle)
+          self.grid[row][col] = angle
+    else:
+      noise = PerlinNoise()
+      for row in range(0, self.num_rows):
+        for col in range(0, self.num_columns):
+          scaled_x = col * 0.005
+          scaled_y = row * 0.005
+          noise_val = noise([scaled_x, scaled_y])
+          angle = noise_val * 2 * math.pi
+          if self.should_round:
+            angle = self.round_angle(angle)
+          self.grid[row][col] = angle
   
 
   def draw_curve(self, x, y):
@@ -178,21 +190,50 @@ class Painting:
     self.refresh_grid()
     self.screen.fill(self.background)
 
-    i = 0
-    while i < self.width:
-     if self.coin_flip():
-       j = randint(0, self.height)
-       self.draw_curve(i, j)
-     
-     if not self.static_gap:
-       self.gap = self.random_gap()
-    
-     i += self.gap
+    if self.use_random_points:
+      # all random
+      for i in range(0, self.num_points):
+        x = randint(0, self.width)
+        y = randint(0, self.height)
+        self.draw_curve(x, y)
 
-    # for i in range(0, self.num_points):
-    #   x = randint(0, self.width)
-    #   y = randint(0, self.height)
-    #   self.draw_curve(x, y)
+    elif self.use_same_points:
+      # linear matching points
+      i = randint(0, min(self.width, self.height))
+      while i < self.width and i < self.height:
+        if self.coin_flip():
+          self.draw_curve(i, i)
+     
+        if not self.static_gap:
+          self.gap = self.random_gap()
+        i += self.gap
+
+    elif self.use_random_height:
+      #itterate through width
+      # pick random height
+      i = 0
+      while i < self.width:
+        if self.coin_flip():
+          j = randint(0, self.height)
+          self.draw_curve(i, j)
+     
+        if not self.static_gap:
+          self.gap = self.random_gap()
+        i += self.gap
+
+    else:
+      # itterate through height
+      # pick random width
+      i = 0
+      while i < self.height:
+        if self.coin_flip():
+          j = randint(0, self.width)
+          self.draw_curve(j, i)
+     
+        if not self.static_gap:
+          self.gap = self.random_gap()
+        i += self.gap
+
 
   
   def refresh(self):
