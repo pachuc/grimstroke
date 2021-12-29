@@ -1,5 +1,5 @@
-import sys, pygame, math, random
-from random import randint
+import sys, pygame, math, pathlib, time
+from random import randint, random
 from screeninfo import get_monitors
 from perlin_noise import PerlinNoise
 from color_pallete import ColorPallete
@@ -53,7 +53,7 @@ class Painting:
     return self.biased_rand_int(1, self.max_gap, 5, min)
 
   def random_radius(self):
-    return (random.random() * self.resolution)
+    return (random() * self.resolution)
   
   def random_circle_thickness(self):
     return randint(1, 10)
@@ -98,7 +98,7 @@ class Painting:
       scalar = randint(1, 2)
       for row in range(0, self.num_rows):
         for col in range(0, self.num_columns):
-          angle = random.random() * scalar * math.pi
+          angle = random() * scalar * math.pi
           if self.should_round:
             angle = self.round_angle(angle)
           self.grid[row][col] = angle
@@ -248,7 +248,8 @@ class Painting:
   
 
   def save(self):
-    filename = f"./saved_images/{time.time()}.png"
+    current_path = pathlib.Path(__file__).parent.resolve()
+    filename = f"{current_path}/saved_images/{time.time()}.png"
     f = open(filename, "x")
     f.close()
     pygame.image.save(self.screen, filename)
