@@ -285,7 +285,7 @@ class Painting:
 
     self.draw()
     self.refresh()
-    pygame.time.set_timer(42069, 60*1000)
+    pygame.time.set_timer(42069, 10*1000)
 
     running = True
     while running:

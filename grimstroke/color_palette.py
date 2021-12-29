@@ -16,10 +16,15 @@ class ColorPalette:
                              "charcoal",
                              "sunset",
                              "pastel",
-                             "modern"]
+                             "modern",
+                             "dark_reds",
+                             "unsat_dark_reds",
+                             "reds",
+                             "purples",
+                             "easter"]
     
   def seed(self):
-    self.strategy = choices(self.color_strategies, weights=[2, 10, 10, 2, 2, 2, 2, 2])[0]
+    self.strategy = choices(self.color_strategies, weights=[2, 15, 15, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])[0]
     self.function = "fixed_options"
     self.color_choices = []
     self.background = self.random_color()
@@ -67,6 +72,36 @@ class ColorPalette:
       self.color_choices.append((37, 42, 52))
       self.color_choices.append((255, 46, 99))
       self.color_choices.append((234, 234, 234))
+    
+    if self.strategy == "dark_reds":
+      self.background = (43, 46, 74)
+      self.color_choices.append((232, 69, 69))
+      self.color_choices.append((144, 55, 73))
+      self.color_choices.append((83, 53, 74))
+    
+    if self.strategy == "unsat_dark_reds":
+      self.background = (246, 114, 128)
+      self.color_choices.append((192, 108, 132))
+      self.color_choices.append((108, 91, 123))
+      self.color_choices.append((53, 92, 125))
+
+    if self.strategy == "reds":
+      self.background = (226, 62, 87)
+      self.color_choices.append((136, 48, 78))
+      self.color_choices.append((82, 37, 70))
+      self.color_choices.append((49, 29, 63))
+    
+    if self.strategy == "purples":
+      self.background = (244, 238, 255)
+      self.color_choices.append((220, 214, 247))
+      self.color_choices.append((166, 177, 225))
+      self.color_choices.append((66, 72, 116))
+    
+    if self.strategy == "easter":
+      self.background = (255, 207, 223)
+      self.color_choices.append((254, 253, 202))
+      self.color_choices.append((224, 249, 181))
+      self.color_choices.append((165, 222, 229))
 
   def get_config(self):
     config = {}
