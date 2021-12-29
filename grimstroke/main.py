@@ -4,6 +4,7 @@ from screeninfo import get_monitors
 from perlin_noise import PerlinNoise
 from threading import Thread
 import time
+from color_pallete import ColorPallete
 
 
 class Painting:
@@ -25,6 +26,7 @@ class Painting:
     self.grid          = [[0 for col in range(self.num_columns)] for row in range(self.num_rows)]
     self.clock         = pygame.time.Clock()
     self.dt            = None
+    self.color_pallete = ColorPallete()
 
 
   def coin_flip(self, num_choices=2):
@@ -61,8 +63,8 @@ class Painting:
   
 
   def seed(self):
-    self.background = self.random_color()
-    self.color = self.random_color()
+    self.color_pallete.seed()
+    self.background = self.color_pallete.get_background()
     self.max_thickness = randint(20, 100)
     self.max_gap       = randint(20, 100)
     self.thickness = self.random_thickness()
@@ -72,7 +74,6 @@ class Painting:
     self.radius = self.random_radius()
     self.circle_thickness = self.random_circle_thickness()
 
-    self.static_color = self.coin_flip()
     self.static_thickness = self.coin_flip()
     self.static_steps = self.coin_flip()
     self.static_gap = self.coin_flip()
@@ -127,8 +128,7 @@ class Painting:
       end_x = x + x_diff
       end_y = y + y_diff
 
-      if not self.static_color:
-        self.color = self.random_color()
+      self.color = self.color_pallete.get_color()
       
       if not self.static_thickness:
         self.thickness = self.random_thickness()
