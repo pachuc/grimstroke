@@ -245,35 +245,4 @@ class FlowField(Painting):
         if not self.static_gap:
           self.gap = self.random_gap()
         i += self.gap
-
-  def run(self):
-
-    self.draw()
-    self.refresh()
-    pygame.time.set_timer(42069, 10*1000)
-
-    running = True
-    while running:
-      self.clock.tick(60)
-      
-      for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-          running = False
-
-        if event.type == 42069:
-          self.draw()
-          self.refresh()
-
-        if event.type == pygame.KEYDOWN:
-          
-          if event.key == pygame.K_ESCAPE:
-            running = False
-          
-          if event.key == pygame.K_s:
-            self.save()
-
-      pygame.event.clear()
-
-    pygame.quit()
-  
   
