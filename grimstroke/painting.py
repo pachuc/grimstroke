@@ -7,14 +7,21 @@ from color_palette import ColorPalette
 
 class Painting(ABC):
 
-  def __init__(self):
+  def __init__(self, fullscreen=True, height=None, width=None):
     pygame.init()
-    monitor = get_monitors()[0]
-    self.width         = monitor.width
-    self.height        = monitor.height
-    self.screen        = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+
+    if fullscreen:
+      monitor = get_monitors()[0]
+      self.width  = monitor.width
+      self.height = monitor.height
+      self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    else:
+      self.width  = width
+      self.height = height
+      self.screen = pygame.display.set_mode((height, width))
+    
     self.color_palette = ColorPalette()
-    self.clock         = pygame.time.Clock()
+    self.clock = pygame.time.Clock()
 
   @abstractmethod
   def get_config(self):

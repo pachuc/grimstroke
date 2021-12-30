@@ -7,8 +7,8 @@ from painting import Painting
 
 class FlowField(Painting):
 
-  def __init__(self):
-    super().__init__()
+  def __init__(self, fullscreen=True, width=None, height=None):
+    super().__init__(fullscreen, width, height)
 
     self.left_x        = int(self.width * -0.5)
     self.right_x       = int(self.width * 1.5)
@@ -53,7 +53,9 @@ class FlowField(Painting):
   
   def get_config(self):
     config = {}
-    attributes = ["max_thickness", 
+    attributes = ["width",
+                  "height",
+                  "max_thickness", 
                   "max_gap", 
                   "thickness", 
                   "num_steps", 
