@@ -7,8 +7,8 @@ from painting import Painting
 
 class FlowField(Painting):
 
-  def __init__(self, fullscreen=True, width=None, height=None):
-    super().__init__(fullscreen, width, height)
+  def __init__(self, fullscreen=True, width=None, height=None, config_path=None):
+    super().__init__(fullscreen, width, height, config_path)
 
     self.left_x        = int(self.width * -0.5)
     self.right_x       = int(self.width * 1.5)
@@ -83,9 +83,11 @@ class FlowField(Painting):
     config["color_palette"] = self.color_palette.get_config()
     return config
   
+  def get_background(self):
+    return self.color_palette.get_background()
+
   def seed(self):
     self.color_palette.seed()
-    self.background = self.color_palette.get_background()
     self.max_thickness = randint(20, 100)
     self.max_gap       = randint(20, 100)
     self.thickness = self.random_thickness()
@@ -198,9 +200,8 @@ class FlowField(Painting):
         pygame.draw.line(self.screen, 'red', (start_x, start_y), (end_x, end_y), 1)
 
   def draw(self):
-    self.seed()
     self.refresh_grid()
-    self.screen.fill(self.background)
+    self.screen.fill(self.get_background())
 
     if self.use_random_points:
       # all random

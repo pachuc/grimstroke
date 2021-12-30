@@ -23,19 +23,26 @@ class ColorPalette:
                              "purples",
                              "easter"]
     
+  def use_config(self, config):
+    for k in config.keys():
+      setattr(self, k, config[k])
+    self.strategy_to_function()
+
+  def strategy_to_function(self):
+    if self.strategy == "single_color" or self.strategy == "random_color":
+      self.function = self.strategy
+    else:
+      self.function = "fixed_options"
+
   def seed(self):
     self.strategy = choices(self.color_strategies, weights=[2, 15, 15, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])[0]
-    self.function = "fixed_options"
+    self.strategy_to_function()
     self.color_choices = []
     self.background = self.random_color()
     self.weights = [3, 2, 1]
 
     if self.strategy == "single_color":
-      self.function = self.strategy
       self.color = self.random_color()
-    
-    if self.strategy == "random_color":
-      self.function = self.strategy
 
     if self.strategy == "fixed_options":
       self.weights = None
@@ -105,7 +112,7 @@ class ColorPalette:
 
   def get_config(self):
     config = {}
-    attributes = ["strategy", "color", "background", "color_choices"]
+    attributes = ["strategy", "color", "background", "color_choices", "weights"]
     for a in attributes:
       config[a] = getattr(self, a)
     return config

@@ -5,9 +5,9 @@ from flow_field import FlowField
 
 def main(args):
   if args.fullscreen:
-    p = FlowField()
+    p = FlowField(config_path=args.config)
   else:
-    p = FlowField(fullscreen=False, width=args.width, height=args.height)
+    p = FlowField(fullscreen=False, width=args.width, height=args.height, config_path=args.config)
   p.run()
 
 def validate_args(parser):
@@ -27,5 +27,6 @@ if __name__ == "__main__":
     parser.add_argument("-f", "--fullscreen", help="Run in full screen mode", action="store_true")
     parser.add_argument("--width", help="Specify window width", type=int)
     parser.add_argument("--height", help="Specify window height", type=int)
+    parser.add_argument("--config", help="Path to config file that should be used", action="store", default=None)
     args = validate_args(parser)
     main(args)
