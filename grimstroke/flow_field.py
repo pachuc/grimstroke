@@ -184,18 +184,18 @@ class FlowField(Painting):
       y = end_y
 
   def draw_flow_field(self):
-    for row in range(0, len(grid)):
-      for col in range(0, len(grid[0])):
-        ang = grid[row][col]
-        x_diff = math.cos(ang) * (resolution/3)
-        y_diff = math.sin(ang) * (resolution/3)
-        x = left_x + (col * resolution)
-        y = top_y + (row * resolution)
+    for row in range(0, len(self.grid)):
+      for col in range(0, len(self.grid[0])):
+        ang = self.grid[row][col]
+        x_diff = math.cos(ang) * (self.resolution/3)
+        y_diff = math.sin(ang) * (self.resolution/3)
+        x = self.left_x + (col * self.resolution)
+        y = self.top_y + (row * self.resolution)
         start_x = x - x_diff
         start_y = y - y_diff
         end_x = x + x_diff
         end_y = y + y_diff
-        pygame.draw.line(screen, 'red', (start_x, start_y), (end_x, end_y), 1)
+        pygame.draw.line(self.screen, 'red', (start_x, start_y), (end_x, end_y), 1)
 
   def draw(self):
     self.seed()

@@ -7,7 +7,7 @@ from color_palette import ColorPalette
 
 class Painting(ABC):
 
-  def __init__(self, fullscreen=True, height=None, width=None):
+  def __init__(self, fullscreen=True, width=None, height=None):
     pygame.init()
 
     if fullscreen:
@@ -18,7 +18,7 @@ class Painting(ABC):
     else:
       self.width  = width
       self.height = height
-      self.screen = pygame.display.set_mode((height, width))
+      self.screen = pygame.display.set_mode((width, height))
     
     self.color_palette = ColorPalette()
     self.clock = pygame.time.Clock()
