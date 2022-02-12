@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 from ast import literal_eval
 
 from color_palette import ColorPalette
+from random import randint
+import datetime
 
 
 class Painting(ABC):
@@ -74,7 +76,46 @@ class Painting(ABC):
     if self.config is None:
       self.seed()
     self.draw()
+    self.write_text()
     self.refresh()
+
+  def write_text(self):
+    t = datetime.datetime.now()
+    center = (self.width//2, self.height//2)
+    print(pygame.font.get_fonts())
+    text_size = 40
+    randc1 = (randint(0, 255), randint(0, 255), randint(0, 255))
+    randc2 = (randint(0, 255), randint(0, 255), randint(0, 255))
+    randc3 = (randint(0, 255), randint(0, 255), randint(0, 255))
+
+    font = pygame.font.Font(pygame.font.match_font('sfcompacttext'), text_size)
+    font.set_bold(False)
+    if t.month == 2 and t.day == 14:
+      vday = font.render(" pachu <3 divya ", True, randc1, (0,0,0))
+      vday2 = font.render("Happy Valentines Day!", True, randc3, (0, 0, 0))
+
+      vdayRect = vday.get_rect()
+      vdayRect2 = vday2.get_rect()
+
+      vdayRect.center = (center[0], center[1] - 200)
+      vdayRect2.center = (center[0], center[1] - 150)
+      self.screen.blit(vday, vdayRect)
+      self.screen.blit(vday2, vdayRect2)
+    
+    if t.month == 3 and t.day == 25:
+      dbday = font.render("Happy Birthday Divya!", True, randc1, (0, 0, 0))
+      dbdayRect = dbday.get_rect()
+      dbday.center = (center[0], center[1] - 200)
+      self.screen.blit(dbday, dbdayRect)
+    
+
+    
+    today_text = font.render(t.strftime("%h %d  %H:%M"), True, randc2, (0,0,0))
+    todayTextRect = today_text.get_rect()
+    todayTextRect.center = (center[0], center[1])
+    self.screen.blit(today_text, todayTextRect)
+    
+
 
   def run(self):
     self.seed_draw_refresh()
