@@ -82,8 +82,7 @@ class Painting(ABC):
   def write_text(self):
     t = datetime.datetime.now()
     center = (self.width//2, self.height//2)
-    print(pygame.font.get_fonts())
-    text_size = 40
+    text_size = 100
     randc1 = (randint(0, 255), randint(0, 255), randint(0, 255))
     randc2 = (randint(0, 255), randint(0, 255), randint(0, 255))
     randc3 = (randint(0, 255), randint(0, 255), randint(0, 255))
@@ -109,7 +108,7 @@ class Painting(ABC):
       self.screen.blit(dbday, dbdayRect)
     
 
-    
+
     today_text = font.render(t.strftime("%h %d  %H:%M"), True, randc2, (0,0,0))
     todayTextRect = today_text.get_rect()
     todayTextRect.center = (center[0], center[1])
