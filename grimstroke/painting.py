@@ -81,39 +81,25 @@ class Painting(ABC):
 
   def write_text(self):
     t = datetime.datetime.now()
-    center = (self.width//2, self.height//2)
-    text_size = 100
-    randc1 = (randint(0, 255), randint(0, 255), randint(0, 255))
-    randc2 = (randint(0, 255), randint(0, 255), randint(0, 255))
-    randc3 = (randint(0, 255), randint(0, 255), randint(0, 255))
 
-    font = pygame.font.Font(pygame.font.match_font('sfcompacttext'), text_size)
-    font.set_bold(False)
+    if t.month == 1 and t.day == 29:
+      self.render_text(" Happy Anniversary! ")
+
     if t.month == 2 and t.day == 14:
-      vday = font.render(" pachu <3 divya ", True, randc1, (0,0,0))
-      vday2 = font.render("Happy Valentines Day!", True, randc3, (0, 0, 0))
-
-      vdayRect = vday.get_rect()
-      vdayRect2 = vday2.get_rect()
-
-      vdayRect.center = (center[0], center[1] - 200)
-      vdayRect2.center = (center[0], center[1] - 150)
-      self.screen.blit(vday, vdayRect)
-      self.screen.blit(vday2, vdayRect2)
+      self.render_text(" pachu <3 divya ")
     
     if t.month == 3 and t.day == 25:
-      dbday = font.render("Happy Birthday Divya!", True, randc1, (0, 0, 0))
-      dbdayRect = dbday.get_rect()
-      dbday.center = (center[0], center[1] - 200)
-      self.screen.blit(dbday, dbdayRect)
-    
+      self.render_text(" Happy Birthday Divya! ")
 
-
-    today_text = font.render(t.strftime("%h %d  %H:%M"), True, randc2, (0,0,0))
-    todayTextRect = today_text.get_rect()
-    todayTextRect.center = (center[0], center[1])
-    self.screen.blit(today_text, todayTextRect)
     
+  def render_text(self, message):
+    text_size = 100
+    font = pygame.font.Font(pygame.font.match_font('sfcompacttext'), text_size)
+    text_color = self.color_palette.get_background()
+    text = font.render(message, True, text_color, (0, 0, 0))
+    textRect = text.get_rect()
+    textRect.center = (self.width//2, self.height//2)
+    self.screen.blit(text, textRect)
 
 
   def run(self):
