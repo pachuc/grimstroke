@@ -7,8 +7,8 @@ from painting import Painting
 
 class FlowField(Painting):
 
-  def __init__(self, fullscreen=True, width=None, height=None, config_path=None):
-    super().__init__(fullscreen, width, height, config_path)
+  def __init__(self, width, height, screen, config_path=None):
+    super().__init__(width, height, screen, config_path=config_path)
 
     self.left_x        = int(self.width * -0.5)
     self.right_x       = int(self.width * 1.5)
@@ -19,18 +19,7 @@ class FlowField(Painting):
     self.num_rows      = int((self.bottom_y - self.top_y) / self.resolution)
     self.grid          = [[0 for col in range(self.num_columns)] for row in range(self.num_rows)]
 
-  def coin_flip(self, num_choices=2):
-    flip = randint(1, num_choices)
-    if flip == 1:
-      return True
-    else:
-      return False
-  
-  def biased_rand_int(self, mn, mx, rolls, f):
-    r = []
-    for i in range(0, rolls):
-      r.append(randint(mn, mx))
-    return f(r)
+
   
   def random_thickness(self):
     return self.biased_rand_int(1, self.max_thickness, 10, min)

@@ -1,13 +1,12 @@
 import argparse
-
-from flow_field import FlowField
+from painting_runner import PaintingRunner
 
 
 def main(args):
   if args.fullscreen:
-    p = FlowField(config_path=args.config)
+    p = PaintingRunner(config_path=args.config)
   else:
-    p = FlowField(fullscreen=False, width=args.width, height=args.height, config_path=args.config)
+    p = PaintingRunner(fullscreen=False, width=args.width, height=args.height, config_path=args.config)
   p.run()
 
 def validate_args(parser):

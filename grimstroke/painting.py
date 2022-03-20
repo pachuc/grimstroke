@@ -1,5 +1,4 @@
 import pygame, pathlib, time
-from screeninfo import get_monitors
 from abc import ABC, abstractmethod
 from ast import literal_eval
 
@@ -10,18 +9,10 @@ import datetime
 
 class Painting(ABC):
 
-  def __init__(self, fullscreen=True, width=None, height=None, config_path=None):
-    pygame.init()
-
-    if fullscreen:
-      monitor = get_monitors()[0]
-      self.width  = monitor.width
-      self.height = monitor.height
-      self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-    else:
-      self.width  = width
-      self.height = height
-      self.screen = pygame.display.set_mode((width, height))
+  def __init__(self, width, height, screen, config_path=None):
+    self.width = width
+    self.height = height
+    self.screen = screen
 
     self.color_palette = ColorPalette()
     self.clock = pygame.time.Clock()
@@ -56,6 +47,20 @@ class Painting(ABC):
   @abstractmethod
   def draw(self):
     pass
+
+  def coin_flip(self, num_choices=2):
+    flip = randint(1, num_choices)
+    if flip == 1:
+      return True
+    else:
+      return False
+  
+  
+  def biased_rand_int(self, mn, mx, rolls, f):
+    r = []
+    for i in range(0, rolls):
+      r.append(randint(mn, mx))
+    return f(r)
 
   def refresh(self):
     pygame.display.flip()
@@ -100,33 +105,4 @@ class Painting(ABC):
     textRect = text.get_rect()
     textRect.center = (self.width//2, self.height//2)
     self.screen.blit(text, textRect)
-
-
-  def run(self):
-    self.seed_draw_refresh()
-    pygame.time.set_timer(42069, 10*1000)
-
-    running = True
-    while running:
-      self.clock.tick(60)
-      
-      for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-          running = False
-
-        if event.type == 42069:
-          self.seed_draw_refresh()
-
-        if event.type == pygame.KEYDOWN:
-          
-          if event.key == pygame.K_ESCAPE:
-            running = False
-          
-          if event.key == pygame.K_s:
-            self.save()
-
-      pygame.event.clear()
-
-    pygame.quit()
-
   
